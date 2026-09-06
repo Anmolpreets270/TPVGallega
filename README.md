@@ -105,7 +105,20 @@ EXPO_PUBLIC_API_URL=http://<ip-servidor>:8080 EXPO_PUBLIC_APP_ROLE=cocina npx ex
 src/config/     API REST, WebSocket STOMP y variables de entorno
 src/types/      Tipos que reflejan los DTOs del backend
 src/services/   Llamadas REST (pedidoService)
-src/data/       Catalogo de productos de ejemplo
+src/data/       Menu del restaurante (catalogo.ts) y zonas/mesas (mesas.ts)
+src/theme/      Paleta de colores compartida por toda la app
 src/screens/    Pantallas de camarero (mesas, nueva comanda) y de sala (cocina/barra)
 src/navigation/ Navegador principal, que decide el flujo segun el rol
 ```
+
+### Zonas y mesas
+
+Definidas en `src/data/mesas.ts`: **Sala** (mesas 1-20) y **Terraza** (mesas
+41-48 y 51-55). La pantalla de mesas del camarero permite alternar entre
+zonas y resalta las mesas con una comanda activa.
+
+### Menu
+
+El catalogo de platos y bebidas (`src/data/catalogo.ts`) esta organizado por
+categoria (Entrantes, Principales, Bebidas) y se puede filtrar por texto al
+crear una comanda.

@@ -5,6 +5,7 @@ import { TicketCard } from '../../components/TicketCard';
 import { suscribirseATopic } from '../../config/websocket';
 import { cambiarEstadoPedido, listarPedidos } from '../../services/pedidoService';
 import { EstadoPedido, Pedido } from '../../types/pedido';
+import { colors } from '../../theme/colors';
 
 interface Props {
   zona: 'cocina' | 'barra';
@@ -59,21 +60,30 @@ export function PantallaZonaScreen({ zona }: Props) {
 
   return (
     <View style={styles.contenedor}>
-      <Text style={styles.titulo}>{zona === 'cocina' ? 'Cocina' : 'Barra'}</Text>
-      <FlatList
-        data={pedidos}
-        horizontal
-        keyExtractor={(pedido) => String(pedido.id)}
-        renderItem={({ item: pedido }) => (
-          <TicketCard pedido={pedido}>
-            {SIGUIENTE_ESTADO[pedido.estado] && (
-              <Pressable style={styles.botonAvanzar} onPress={() => avanzarEstado(pedido)}>
-                <Text style={styles.botonAvanzarTexto}>Marcar {SIGUIENTE_ESTADO[pedido.estado]}</Text>
-              </Pressable>
-            )}
-          </TicketCard>
-        )}
-      />
+      <View style={styles.cabecera}>
+        <Text style={styles.titulo}>{zona === 'cocina' ? 'Cocina' : 'Barra'}</Text>
+        <View style={styles.contador}>
+          <Text style={styles.contadorTexto}>{pedidos.length}</Text>
+        </View>
+      </View>
+      {pedidos.length === 0 ? (
+        <Text style={styles.sinTickets}>No hay comandas pendientes</Text>
+      ) : (
+        <FlatList
+          data={pedidos}
+          horizontal
+          keyExtractor={(pedido) => String(pedido.id)}
+          renderItem={({ item: pedido }) => (
+            <TicketCard pedido={pedido}>
+              {SIGUIENTE_ESTADO[pedido.estado] && (
+                <Pressable style={styles.botonAvanzar} onPress={() => avanzarEstado(pedido)}>
+                  <Text style={styles.botonAvanzarTexto}>Marcar {SIGUIENTE_ESTADO[pedido.estado]}</Text>
+                </Pressable>
+              )}
+            </TicketCard>
+          )}
+        />
+      )}
     </View>
   );
 }
@@ -82,22 +92,42 @@ const styles = StyleSheet.create({
   contenedor: {
     flex: 1,
     padding: 16,
-    backgroundColor: '#ecf0f1',
+    backgroundColor: colors.background,
+  },
+  cabecera: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
   },
   titulo: {
     fontSize: 24,
     fontWeight: 'bold',
-    marginBottom: 12,
+    color: colors.textPrimary,
+  },
+  contador: {
+    marginLeft: 10,
+    backgroundColor: colors.accent,
+    borderRadius: 12,
+    paddingHorizontal: 10,
+    paddingVertical: 2,
+  },
+  contadorTexto: {
+    color: colors.textOnPrimary,
+    fontWeight: '700',
+  },
+  sinTickets: {
+    color: colors.textSecondary,
+    fontSize: 16,
   },
   botonAvanzar: {
     marginTop: 8,
-    backgroundColor: '#2980b9',
+    backgroundColor: colors.primary,
     padding: 8,
     borderRadius: 6,
     alignItems: 'center',
   },
   botonAvanzarTexto: {
-    color: '#fff',
+    color: colors.textOnPrimary,
     fontWeight: '600',
   },
 });

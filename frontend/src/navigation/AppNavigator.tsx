@@ -6,6 +6,7 @@ import { APP_ROLE } from '../config/env';
 import { MesasScreen } from '../screens/camarero/MesasScreen';
 import { NuevoPedidoScreen } from '../screens/camarero/NuevoPedidoScreen';
 import { PantallaZonaScreen } from '../screens/pantalla/PantallaZonaScreen';
+import { colors } from '../theme/colors';
 
 export type CamareroStackParamList = {
   Mesas: undefined;
@@ -16,7 +17,13 @@ const CamareroStack = createNativeStackNavigator<CamareroStackParamList>();
 
 function CamareroNavigator() {
   return (
-    <CamareroStack.Navigator>
+    <CamareroStack.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: colors.primary },
+        headerTintColor: colors.textOnPrimary,
+        headerTitleStyle: { fontWeight: '700' },
+      }}
+    >
       <CamareroStack.Screen name="Mesas" component={MesasScreen} options={{ title: 'TPVGallega' }} />
       <CamareroStack.Screen
         name="NuevoPedido"

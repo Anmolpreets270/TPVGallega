@@ -2,13 +2,14 @@ import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 import { Pedido } from '../types/pedido';
+import { colors } from '../theme/colors';
 
 const COLOR_POR_ESTADO: Record<Pedido['estado'], string> = {
-  PENDIENTE: '#e74c3c',
-  PREPARANDO: '#f39c12',
-  LISTO: '#27ae60',
-  ENTREGADO: '#7f8c8d',
-  CANCELADO: '#95a5a6',
+  PENDIENTE: colors.danger,
+  PREPARANDO: colors.warning,
+  LISTO: colors.success,
+  ENTREGADO: colors.neutral,
+  CANCELADO: colors.neutral,
 };
 
 interface Props {
@@ -37,11 +38,11 @@ export function TicketCard({ pedido, children }: Props) {
 const styles = StyleSheet.create({
   card: {
     borderWidth: 2,
-    borderRadius: 8,
+    borderRadius: 10,
     padding: 12,
     margin: 8,
     minWidth: 220,
-    backgroundColor: '#fff',
+    backgroundColor: colors.surface,
   },
   cabecera: {
     flexDirection: 'row',
@@ -51,6 +52,7 @@ const styles = StyleSheet.create({
   mesa: {
     fontSize: 18,
     fontWeight: 'bold',
+    color: colors.textPrimary,
   },
   estado: {
     fontSize: 14,
@@ -59,5 +61,6 @@ const styles = StyleSheet.create({
   linea: {
     fontSize: 15,
     marginBottom: 2,
+    color: colors.textPrimary,
   },
 });
