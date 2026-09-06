@@ -1,0 +1,16 @@
+{
+  "expo": {
+    "name": "TPVGallega",
+    "slug": "tpvgallega",
+    "version": "0.1.0",
+    "orientation": "default",
+    "userInterfaceStyle": "light",
+    "platforms": ["android", "web"],
+    "android": {
+      "package": "com.tpvgallega.frontend"
+    },
+    "web": {
+      "bundler": "metro"
+    }
+  }
+}
