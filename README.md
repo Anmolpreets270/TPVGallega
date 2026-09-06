@@ -26,6 +26,17 @@ Arquitectura hexagonal con tres capas:
   JPA (PostgreSQL) y adaptador WebSocket (STOMP) que publica en `/topic/cocina` y
   `/topic/barra` segun el tipo de producto de cada linea del pedido.
 
+### Base de datos
+
+El backend necesita PostgreSQL corriendo en `localhost:5432`. El repo incluye un
+`docker-compose.yml` con los mismos valores que usa el backend por defecto
+(base `tpvgallega`, usuario/contrasena `postgres`), asi que no hace falta
+configurar nada mas:
+
+```bash
+docker compose up -d
+```
+
 ### Ejecutar
 
 No hace falta tener Maven instalado: el proyecto incluye el Maven Wrapper.
@@ -38,7 +49,8 @@ cd backend
 
 (Si prefieres usar tu propio Maven: `mvn spring-boot:run`)
 
-Variables de entorno (con valores por defecto para desarrollo local):
+Variables de entorno (con valores por defecto para desarrollo local, ya
+coherentes con el `docker-compose.yml`):
 `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `SERVER_PORT`.
 
 ### API REST
