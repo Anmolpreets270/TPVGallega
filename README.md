@@ -28,10 +28,15 @@ Arquitectura hexagonal con tres capas:
 
 ### Ejecutar
 
+No hace falta tener Maven instalado: el proyecto incluye el Maven Wrapper.
+
 ```bash
 cd backend
-mvn spring-boot:run
+./mvnw spring-boot:run        # Linux/Mac
+.\mvnw.cmd spring-boot:run     # Windows (PowerShell/cmd)
 ```
+
+(Si prefieres usar tu propio Maven: `mvn spring-boot:run`)
 
 Variables de entorno (con valores por defecto para desarrollo local):
 `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `SERVER_PORT`.
@@ -56,7 +61,7 @@ Endpoint STOMP en `/ws`. Canales: `/topic/cocina` y `/topic/barra`.
 
 ```bash
 cd backend
-mvn test
+./mvnw test
 ```
 
 ## Frontend
