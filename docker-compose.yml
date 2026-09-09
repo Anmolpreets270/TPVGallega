@@ -10,6 +10,12 @@ services:
       - "5432:5432"
     volumes:
       - tpvgallega-db-data:/var/lib/postgresql/data
+      - ./db/init.sql:/docker-entrypoint-initdb.d/01-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d tpvgallega"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
 volumes:
   tpvgallega-db-data:

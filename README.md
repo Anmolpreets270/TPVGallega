@@ -37,6 +37,16 @@ configurar nada mas:
 docker compose up -d
 ```
 
+La primera vez que arranca (con el volumen de datos vacio), Postgres ejecuta
+automaticamente `db/init.sql`, que crea las tablas `pedidos` y
+`lineas_pedido`. Si ya tenias el contenedor levantado de antes (creado sin
+este script), tienes dos opciones:
+
+- No hacer nada: Hibernate (`ddl-auto: update`) ya habia creado esas tablas
+  al arrancar el backend, asi que todo sigue funcionando igual.
+- O recrear el volumen para que el script se ejecute desde cero (**esto
+  borra los pedidos guardados hasta ahora**): `docker compose down -v && docker compose up -d`.
+
 ### Ejecutar
 
 No hace falta tener Maven instalado: el proyecto incluye el Maven Wrapper.
