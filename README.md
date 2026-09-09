@@ -24,7 +24,10 @@ Arquitectura hexagonal con tres capas:
   estado validas).
 - **infrastructure**: adaptador REST (`PedidoController`), adaptador de persistencia
   JPA (PostgreSQL) y adaptador WebSocket (STOMP) que publica en `/topic/cocina` y
-  `/topic/barra` segun el tipo de producto de cada linea del pedido.
+  `/topic/barra` segun el tipo de producto de cada linea del pedido. El mapeo entre
+  DTOs/entidades y las clases de dominio se hace con **MapStruct** (interfaces
+  `*Mapper` junto a cada adaptador; Spring inyecta la implementacion generada en
+  compilacion).
 
 ### Base de datos
 
