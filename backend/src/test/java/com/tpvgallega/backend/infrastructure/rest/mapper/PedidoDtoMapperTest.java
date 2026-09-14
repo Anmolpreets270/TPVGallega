@@ -11,9 +11,9 @@ import com.tpvgallega.backend.domain.model.EstadoPedido;
 import com.tpvgallega.backend.domain.model.LineaPedido;
 import com.tpvgallega.backend.domain.model.Pedido;
 import com.tpvgallega.backend.domain.model.TipoProducto;
-import com.tpvgallega.backend.infrastructure.rest.dto.CrearPedidoRequest;
-import com.tpvgallega.backend.infrastructure.rest.dto.LineaPedidoRequest;
-import com.tpvgallega.backend.infrastructure.rest.dto.PedidoResponse;
+import com.tpvgallega.backend.infrastructure.rest.generated.model.CrearPedidoRequest;
+import com.tpvgallega.backend.infrastructure.rest.generated.model.LineaPedidoRequest;
+import com.tpvgallega.backend.infrastructure.rest.generated.model.PedidoResponse;
 
 class PedidoDtoMapperTest {
 
@@ -22,13 +22,18 @@ class PedidoDtoMapperTest {
     @Test
     void toDomainDejaSinAsignarLosCamposQueDecideElServicio() {
         CrearPedidoRequest request = new CrearPedidoRequest(
-                4, List.of(new LineaPedidoRequest("Pulpo a feira", 2, TipoProducto.COMIDA, "sin sal")));
+                4,
+                List.of(new LineaPedidoRequest(
+                                "Pulpo a feira", 2,
+                                com.tpvgallega.backend.infrastructure.rest.generated.model.TipoProducto.COMIDA)
+                        .notas("sin sal")));
 
         Pedido pedido = mapper.toDomain(request);
 
         assertThat(pedido.getMesa()).isEqualTo(4);
         assertThat(pedido.getLineas()).hasSize(1);
         assertThat(pedido.getLineas().get(0).getNombreProducto()).isEqualTo("Pulpo a feira");
+        assertThat(pedido.getLineas().get(0).getTipoProducto()).isEqualTo(TipoProducto.COMIDA);
         assertThat(pedido.getLineas().get(0).getNotas()).isEqualTo("sin sal");
         assertThat(pedido.getId()).isNull();
         assertThat(pedido.getEstado()).isNull();
@@ -53,11 +58,12 @@ class PedidoDtoMapperTest {
 
         PedidoResponse response = mapper.toResponse(pedido);
 
-        assertThat(response.id()).isEqualTo(1L);
-        assertThat(response.mesa()).isEqualTo(4);
-        assertThat(response.estado()).isEqualTo(EstadoPedido.PENDIENTE);
-        assertThat(response.lineas()).hasSize(1);
-        assertThat(response.lineas().get(0).id()).isEqualTo(10L);
-        assertThat(response.lineas().get(0).nombreProducto()).isEqualTo("Croquetas");
+        assertThat(response.getId()).isEqualTo(1L);
+        assertThat(response.getMesa()).isEqualTo(4);
+        assertThat(response.getEstado())
+                .isEqualTo(com.tpvgallega.backend.infrastructure.rest.generated.model.EstadoPedido.PENDIENTE);
+        assertThat(response.getLineas()).hasSize(1);
+        assertThat(response.getLineas().get(0).getId()).isEqualTo(10L);
+        assertThat(response.getLineas().get(0).getNombreProducto()).isEqualTo("Croquetas");
     }
 }

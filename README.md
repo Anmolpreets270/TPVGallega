@@ -66,7 +66,26 @@ Variables de entorno (con valores por defecto para desarrollo local, ya
 coherentes con el `docker-compose.yml`):
 `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `SERVER_PORT`.
 
-### API REST
+### API REST (contrato OpenAPI)
+
+El contrato vive en `backend/src/main/resources/openapi/pedidos-api.yaml` y es
+la fuente de la verdad de la API: define las rutas, los esquemas de
+request/response y las validaciones (`required`, `minItems`, etc.). En cada
+build, el plugin `openapi-generator-maven-plugin` genera a partir de ese YAML:
+
+- La interfaz `PedidosApi` (`infrastructure/rest/generated/api`), con un
+  metodo `default` por operacion (path, metodo HTTP, `@Valid` y content-type
+  ya resueltos). `PedidoController` simplemente `implements PedidosApi` y
+  sobreescribe cada metodo.
+- Los modelos (`CrearPedidoRequest`, `PedidoResponse`, `EstadoPedido`, etc.)
+  en `infrastructure/rest/generated/model`, usados directamente como DTOs
+  (mapeados a/desde el dominio con MapStruct).
+
+Nada de esto se versiona en git (se regenera en `target/generated-sources`
+en cada `./mvnw compile`), asi que **el YAML es lo unico que hay que editar**
+para cambiar la API — tras editarlo, un `./mvnw compile` regenera la
+interfaz y el compilador avisara en `PedidoController` si falta implementar
+algo.
 
 | Metodo | Ruta                     | Descripcion                          |
 |--------|--------------------------|---------------------------------------|

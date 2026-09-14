@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import com.tpvgallega.backend.domain.exception.PedidoInvalidoException;
 import com.tpvgallega.backend.domain.exception.PedidoNoEncontradoException;
 import com.tpvgallega.backend.domain.exception.TransicionEstadoInvalidaException;
+import com.tpvgallega.backend.infrastructure.rest.generated.model.ErrorResponse;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -35,6 +36,7 @@ public class GlobalExceptionHandler {
     }
 
     private ResponseEntity<ErrorResponse> construirRespuesta(HttpStatus status, String mensaje) {
-        return ResponseEntity.status(status).body(new ErrorResponse(LocalDateTime.now(), status.value(), mensaje));
+        ErrorResponse error = new ErrorResponse().timestamp(LocalDateTime.now()).status(status.value()).mensaje(mensaje);
+        return ResponseEntity.status(status).body(error);
     }
 }

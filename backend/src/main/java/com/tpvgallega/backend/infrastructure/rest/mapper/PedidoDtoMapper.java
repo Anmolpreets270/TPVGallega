@@ -5,10 +5,10 @@ import org.mapstruct.Mapping;
 
 import com.tpvgallega.backend.domain.model.LineaPedido;
 import com.tpvgallega.backend.domain.model.Pedido;
-import com.tpvgallega.backend.infrastructure.rest.dto.CrearPedidoRequest;
-import com.tpvgallega.backend.infrastructure.rest.dto.LineaPedidoRequest;
-import com.tpvgallega.backend.infrastructure.rest.dto.LineaPedidoResponse;
-import com.tpvgallega.backend.infrastructure.rest.dto.PedidoResponse;
+import com.tpvgallega.backend.infrastructure.rest.generated.model.CrearPedidoRequest;
+import com.tpvgallega.backend.infrastructure.rest.generated.model.LineaPedidoRequest;
+import com.tpvgallega.backend.infrastructure.rest.generated.model.LineaPedidoResponse;
+import com.tpvgallega.backend.infrastructure.rest.generated.model.PedidoResponse;
 
 @Mapper(componentModel = "spring")
 public interface PedidoDtoMapper {
@@ -25,4 +25,7 @@ public interface PedidoDtoMapper {
     PedidoResponse toResponse(Pedido pedido);
 
     LineaPedidoResponse toResponse(LineaPedido linea);
+
+    com.tpvgallega.backend.domain.model.EstadoPedido toDomain(
+            com.tpvgallega.backend.infrastructure.rest.generated.model.EstadoPedido estado);
 }

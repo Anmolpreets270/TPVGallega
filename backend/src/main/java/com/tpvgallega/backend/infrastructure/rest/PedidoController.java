@@ -3,52 +3,50 @@ package com.tpvgallega.backend.infrastructure.rest;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.tpvgallega.backend.application.port.in.GestionarPedidoUseCase;
-import com.tpvgallega.backend.domain.model.EstadoPedido;
-import com.tpvgallega.backend.infrastructure.rest.dto.CambiarEstadoRequest;
-import com.tpvgallega.backend.infrastructure.rest.dto.CrearPedidoRequest;
-import com.tpvgallega.backend.infrastructure.rest.dto.PedidoResponse;
+import com.tpvgallega.backend.infrastructure.rest.generated.api.PedidosApi;
+import com.tpvgallega.backend.infrastructure.rest.generated.model.CambiarEstadoRequest;
+import com.tpvgallega.backend.infrastructure.rest.generated.model.CrearPedidoRequest;
+import com.tpvgallega.backend.infrastructure.rest.generated.model.EstadoPedido;
+import com.tpvgallega.backend.infrastructure.rest.generated.model.PedidoResponse;
 import com.tpvgallega.backend.infrastructure.rest.mapper.PedidoDtoMapper;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/api/pedidos")
 @RequiredArgsConstructor
-public class PedidoController {
+public class PedidoController implements PedidosApi {
 
     private final GestionarPedidoUseCase gestionarPedidoUseCase;
     private final PedidoDtoMapper mapper;
 
-    @PostMapping
-    @ResponseStatus(HttpStatus.CREATED)
-    public PedidoResponse crearPedido(@Valid @RequestBody CrearPedidoRequest request) {
-        return mapper.toResponse(gestionarPedidoUseCase.crearPedido(mapper.toDomain(request)));
+    @Override
+    public ResponseEntity<PedidoResponse> crearPedido(CrearPedidoRequest crearPedidoRequest) {
+        PedidoResponse response =
+                mapper.toResponse(gestionarPedidoUseCase.crearPedido(mapper.toDomain(crearPedidoRequest)));
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    @GetMapping
-    public List<PedidoResponse> listarPedidos(@RequestParam(required = false) EstadoPedido estado) {
-        return gestionarPedidoUseCase.listarPedidos(estado).stream().map(mapper::toResponse).toList();
+    @Override
+    public ResponseEntity<List<PedidoResponse>> listarPedidos(EstadoPedido estado) {
+        List<PedidoResponse> pedidos = gestionarPedidoUseCase.listarPedidos(mapper.toDomain(estado)).stream()
+                .map(mapper::toResponse)
+                .toList();
+        return ResponseEntity.ok(pedidos);
     }
 
-    @GetMapping("/{id}")
-    public PedidoResponse obtenerPedido(@PathVariable Long id) {
-        return mapper.toResponse(gestionarPedidoUseCase.obtenerPedido(id));
+    @Override
+    public ResponseEntity<PedidoResponse> obtenerPedido(Long id) {
+        return ResponseEntity.ok(mapper.toResponse(gestionarPedidoUseCase.obtenerPedido(id)));
     }
 
-    @PatchMapping("/{id}/estado")
-    public PedidoResponse cambiarEstado(@PathVariable Long id, @Valid @RequestBody CambiarEstadoRequest request) {
-        return mapper.toResponse(gestionarPedidoUseCase.cambiarEstado(id, request.estado()));
+    @Override
+    public ResponseEntity<PedidoResponse> cambiarEstado(Long id, CambiarEstadoRequest cambiarEstadoRequest) {
+        var nuevoEstado = mapper.toDomain(cambiarEstadoRequest.getEstado());
+        PedidoResponse response = mapper.toResponse(gestionarPedidoUseCase.cambiarEstado(id, nuevoEstado));
+        return ResponseEntity.ok(response);
     }
 }
